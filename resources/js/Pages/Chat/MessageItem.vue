@@ -1,7 +1,9 @@
 <template>
-    <div>Message Item</div>
+    <div>{{ message.user.name }}: {{ message.content }}</div>
 </template>
 
 <script>
-    export default {}
+    export default {
+        props: ['message']
+    }
 </script>
