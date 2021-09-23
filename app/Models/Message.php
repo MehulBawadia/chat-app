@@ -9,6 +9,10 @@ class Message extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'room_id', 'user_id', 'content',
+    ];
+
     /**
      * A message belongs to a single room.
      *
@@ -16,7 +20,7 @@ class Message extends Model
      */
     public function room()
     {
-        return $this->belongsTo(Room::class, 'id', 'room_id');
+        return $this->belongsTo(Room::class, 'room_id', 'id');
     }
 
     /**
@@ -26,6 +30,6 @@ class Message extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
