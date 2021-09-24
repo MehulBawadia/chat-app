@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Events\NewChatMessage;
 
 class ChatController extends Controller
 {
@@ -42,10 +43,14 @@ class ChatController extends Controller
      */
     public function addNewMessage($roomId, Request $request)
     {
-        return Message::create([
+        $message = Message::create([
             'user_id' => auth()->id(),
             'room_id' => $roomId,
             'content' => $request->content,
         ]);
+
+        broadcast(new NewChatMessage($message))->toOthers();
+
+        return $message;
     }
 }

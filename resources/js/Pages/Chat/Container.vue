@@ -40,7 +40,31 @@
             }
         },
 
+        watch: {
+            currentRoom(newRoom, oldRoom) {
+                if (oldRoom.id) {
+                    this.disconnect(oldRoom);
+                }
+                this.connect();
+            }
+        },
+
         methods: {
+            connect() {
+                if (this.currentRoom.id) {
+                    let vm = this;
+                    this.getMessages();
+                    window.Echo.private("chat." + this.currentRoom.id)
+                        .listen('.message.new', e => {
+                            vm.getMessages();
+                        });
+                }
+            },
+
+            disconnect(room) {
+                window.Echo.leave("chat." + room.id);
+            },
+
             getRooms() {
                 axios.get('/chat/rooms')
                     .then(response => {
@@ -53,7 +77,6 @@
 
             setRoom(room) {
                 this.currentRoom = room;
-                this.getMessages();
             },
 
             getMessages() {
